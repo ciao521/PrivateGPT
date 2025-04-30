@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import streamlit as st
 import asyncio
 
+# ページ設定を最初に行う（これがStreamlitの最初のコマンドである必要がある）
+st.set_page_config(page_title="Private ChatGPT", layout="wide")
+
 # ChromaDB SQLite3バージョンの問題を解決するためのコード
 import sys
 import subprocess
@@ -256,7 +259,6 @@ def settings_section():
                 st.experimental_rerun()
 
 def main():
-    st.set_page_config(page_title="Private ChatGPT", layout="wide")
     st.title("Private ChatGPT on Local Data or Google Drive")
     
     # Initialize session state for settings
