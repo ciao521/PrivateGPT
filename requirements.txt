@@ -1,6 +1,10 @@
 streamlit 
-embedchain 
+embedchain==0.1.99
+langchain==0.1.4
+chromadb==0.4.17
 google-auth 
 google-auth-oauthlib 
 google-api-python-client 
 python-dotenv
+redis
+psycopg2-binary

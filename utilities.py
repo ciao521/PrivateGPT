@@ -8,9 +8,19 @@ load_dotenv()
 
 
 def refresh_file():
-    path_to_sandbox_folder = '/kim/pp/sandbox/'
-    file_list_in_sandbox = os.listdir(path_to_sandbox_folder)
-    return path_to_sandbox_folder, file_list_in_sandbox
+    """
+    Get a list of files in the sandbox directory.
+    Returns a list of filenames in the sandbox directory.
+    """
+    path_to_sandbox_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sandbox')
+    # Create the sandbox folder if it doesn't exist
+    os.makedirs(path_to_sandbox_folder, exist_ok=True)
+    
+    # Get list of files and filter out hidden files
+    file_list_in_sandbox = [f for f in os.listdir(path_to_sandbox_folder) 
+                          if not f.startswith('.') and os.path.isfile(os.path.join(path_to_sandbox_folder, f))]
+    
+    return file_list_in_sandbox
 
 
 # REDIRECT_URI = "https://linkpay.to/login/callback"

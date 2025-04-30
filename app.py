@@ -1,8 +1,8 @@
-from .file_list import get_file_list
-from .utilities import convert_size, CLIENT_ID
-from .views import fetch_files_from_drive
-from .drive_operations import upload_file_to_drive
-from .google_auth_helpers import flow, credentials_to_dict, get_credentials_from_session
+from file_list import get_file_list
+from utilities import convert_size, CLIENT_ID
+from views import fetch_files_from_drive
+from drive_operations import upload_file_to_drive
+from google_auth_helpers import flow, credentials_to_dict, get_credentials_from_session
 from googleapiclient.discovery import build
 from starlette.websockets import WebSocketDisconnect
 from starlette.middleware.sessions import SessionMiddleware
@@ -21,7 +21,7 @@ import os
 # router = APIRouter()
 # this part should be in the module file to be imported here
 
-from .ws import chat
+from ws import chat
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO,
@@ -61,7 +61,7 @@ ALGORITHM = "HS256"
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 # app.mount("/", StaticFiles(directory="site", html=True), name="site")
-app.mount("/static", StaticFiles(directory="pp/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # @app.get("/items/{id}", response_class=HTMLResponse)
 # async def read_item(request: Request, id: str):
@@ -189,7 +189,7 @@ async def list_files_route(request: Request):
 
     except:
 
-        # from .chat import chat, embbding
+        # from chat import chat, embbding
 
         # if not fetched_data:
         # if not token:
@@ -199,7 +199,7 @@ async def list_files_route(request: Request):
         print("items_", items_)
         # embbding([f['name'] for f in items])
 
-        # from .utilities import file_list_in_sandbox
+        # from utilities import file_list_in_sandbox
         # embbding(file_list_in_sandbox)
 
         fetched_data_ = {
@@ -291,8 +291,8 @@ async def websocket_endpoint_chat(websocket: WebSocket):
 
     try:
 
-        # from .chat import chat, embbding
-        # from .utilities import file_list_in_sandbox
+        # from chat import chat, embbding
+        # from utilities import file_list_in_sandbox
         # elon_musk_bot = embbding(file_list_in_sandbox)
         # # embbding([f['name'] for f in items])
 
@@ -303,9 +303,9 @@ async def websocket_endpoint_chat(websocket: WebSocket):
         os.environ["OPENAI_API_KEY"] = ok
         elon_musk_bot = App()
 
-        # from .utilities import path_to_sandbox_folder
-        # from .utilities import file_list_in_sandbox
-        from .utilities import refresh_file
+        # from utilities import path_to_sandbox_folder
+        # from utilities import file_list_in_sandbox
+        from utilities import refresh_file
         path_to_sandbox_folder, file_list_in_sandbox = refresh_file()
 
         for i, file_name in enumerate(file_list_in_sandbox):

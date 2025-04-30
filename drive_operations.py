@@ -1,7 +1,7 @@
 from functools import lru_cache
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from .utilities import MAX_DEPTH
+from utilities import MAX_DEPTH
 import logging
 import tempfile
 import asyncio
@@ -9,6 +9,45 @@ import os
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
+
+def fetch_files_from_drive(service, folder_id='root', file_types=None):
+    """
+    Fetch files from Google Drive.
+    
+    Args:
+        service: Google Drive API service instance
+        folder_id: ID of the folder to search in (default: 'root')
+        file_types: List of MIME types to filter by (default: None - all files)
+    
+    Returns:
+        List of files with their metadata
+    """
+    query = f"'{folder_id}' in parents and trashed=false"
+    
+    # Add file type filter if specified
+    if file_types:
+        type_queries = [f"mimeType='{mime_type}'" for mime_type in file_types]
+        type_query = " or ".join(type_queries)
+        query += f" and ({type_query})"
+    
+    results = []
+    page_token = None
+    
+    while True:
+        response = service.files().list(
+            q=query,
+            spaces='drive',
+            fields='nextPageToken, files(id, name, mimeType, size, createdTime)',
+            pageToken=page_token
+        ).execute()
+        
+        results.extend(response.get('files', []))
+        page_token = response.get('nextPageToken', None)
+        
+        if not page_token:
+            break
+            
+    return results
 
 
 @lru_cache(maxsize=None)
