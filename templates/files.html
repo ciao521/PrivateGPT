@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Google Drive Files</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.css" rel="stylesheet" />
+    <style>
+        .folder-card {
+            border: 3px solid #3490dc;
+        }
+
+        .file-card {
+            border: 3px solid #38a169;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-text {
+            font-size: 0.7rem;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Include Flowbite icons -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.8.0/dist/js/flowbite.min.js"></script>
+
+
+    <!-- Navbar/Header with User Details -->
+    <nav class="bg-gradient-to-r from-red-400 to-blue-500 p-4 text-white shadow-md sticky-nav">
+        <div class="p-5">
+            <h1 class="text-2xl font-bold">Google Drive Files</h1>
+            <div class="mt-2 flex items-center space-x-4">
+                <span><strong>Name:</strong> {{ fetched_data.user_name }}</span>
+                <span><strong>Email:</strong> {{ fetched_data.user_email }}</span>
+                <span><strong>Folders in Root:</strong> {{ fetched_data.root_folders_count }}</span>
+                <span><strong>Total Subfolders:</strong> {{ fetched_data.total_subfolders_count }}</span>
+                <span><strong>Total Files:</strong> {{ 0 if fetched_data.total_files == "N/A" else
+                    fetched_data.total_files }}</span>
+                <span><strong>Total Size:</strong> {{ "0" if fetched_data.total_size == "N/A" else
+                    fetched_data.total_size|convert_size }}</span>
+                <span><strong>Loading Time:</strong> {{ fetched_data.elapsed_time }} seconds</span>
+            </div>
+        </div>
+    </nav>
+    <!-- File upload section -->
+    <div class="p-5">
+        <div class="p-5 bg-gray-200 rounded shadow">
+            <h2
+                class="text-xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 text-white inline-block p-2 rounded">
+                Upload a file</h2>
+            <form action="/upload/" enctype="multipart/form-data" method="post" class="mt-3">
+                <div class="mb-3 flex items-center space-x-4">
+                    <div class="flex-1">
+                        <input type="file" name="file" class="form-control">
+                    </div>
+                    <button type="submit"
+                        class="btn btn-primary bg-blue-600 hover:bg-blue-700 text-white">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="p-5">
+        <div class="p-5 bg-white rounded shadow">
+            <!-- Display files and folders -->
+            <h2
+                class="text-xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-500 text-white inline-block p-2 rounded">
+                Folders and Files</h2>
+            <div class="flex flex-wrap gap-4 w-full">
+
+                <!-- Folders First -->
+                {% for item in fetched_data['items'] if item.mimeType == "application/vnd.google-apps.folder" %}
+                <div class="folder-card card p-2 bg-white rounded shadow">
+                    <div class="card-body text-left">
+                        <h5 class="card-title truncate w-48 d-inline-block align-middle">{{ item.name }}</h5>
+                        <div class="d-flex justify-content-between text-xs w-full mt-2">
+                            <span>Total Files: {{ item.totalFiles }}</span>
+                            <span>Total Size: {{ item.totalSize|convert_size }}</span>
+                            <span>Subfolders: {{ item.totalSubFolders}}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Then Files -->
+                {% for item in fetched_data['items'] if item.mimeType != "application/vnd.google-apps.folder" %}
+                <div class="file-card card p-2 bg-white rounded shadow">
+                    <div class="card-body text-left">
+                        <h5 class="card-title truncate w-48 d-inline-block align-middle">{{ item.name }}</h5>
+                        <div class="d-flex justify-content-between text-xs w-full mt-2">
+                            <span>Last Updated: {{ item.modifiedTime }}</span>
+                            <span>Size: {{ item.size|default("0")|convert_size }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="logs"></div>
+    <div class="p-5"><input id="text" type="text"><button id="scanDriveBtn" class="btn btn-primary">Send</button></div>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // const socket = new WebSocket(`wss://linkpay.to/ws`);
+            const socket = new WebSocket(`wss://promptpl.us/chat`);
+
+            socket.onopen = (event) => {
+                console.log("WebSocket Connected");
+            };
+
+            socket.onmessage = async (event) => {
+                const logDiv = document.getElementById("logs");
+                logDiv.innerHTML += `<p>${event.data}</p>`;
+
+                // logDiv.innerHTML += `<p>${event.data.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`;
+                
+                console.log(event.data);  // Added for debugging
+
+                if (event.data === "Fetching completed!") {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    window.location.href = "/files/";
+                }
+            };
+
+            socket.onclose = (event) => {
+                if (event.wasClean) {
+                    console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+                } else {
+                    console.log('Connection died');
+                }
+            };
+
+            socket.onerror = (error) => {
+                console.error(`Error: ${error.message}`);
+            };
+
+            document.getElementById("scanDriveBtn").addEventListener("click", function () {
+                socket.send(document.getElementById("text").value);
+            });
+        });
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>

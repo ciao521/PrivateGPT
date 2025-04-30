@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="{CLIENT_ID}">
+
+    <title>/promptpl.us> Your personal Generative AI Consultant</title>
+
+    <script src="{{ url_for('static', path='/aos.js') }}"></script>
+    <script src="{{ url_for('static', path='/afb.js') }}"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', path='/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', path='/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', path='/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', path='/site.webmanifest') }}">
+
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.0/flowbite.min.css" rel="stylesheet" /> -->
+
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"> -->
+
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="{{ url_for('static', path='/output.css') }}" rel="stylesheet">
+
+    <link href="{{ url_for('static', path='/custom.css') }}" rel="stylesheet">
+
+</head>
+
+<body class="bg-gray-100 relative">
+    <!-- pt-3 -->
+    <!-- pb-3 -->
+    <div
+        class="inset-x-0 mx-auto sm:top-6 sm:w-4/5 sm:rounded-3xl fixed z-30 shadow border border-gray-100 backdrop-blur-lg">
+        <!-- <div class=""> -->
+        <div class="px-4 flex flex-wrap items-center justify-between font-semibold text-gray-600">
+
+            <div class="pb-3 w-full sm:w-auto flex justify-center">
+                {% from 'logo_div.html' import logo %}
+                {{ logo(4) }}
+            </div>
+
+            <div class="space-x-4 w-full sm:w-auto flex justify-center font-semibold text-gray-600">
+
+                <!-- <a href="#home" class="hover:bg-gray-200 rounded-lg px-3 pb-1">Home</a> -->
+
+                <a href="#home" class="hover:text-yellow-400 transition duration-100">Home</a>
+                <a href="#features" class="hover:text-yellow-400 transition duration-100">Features</a>
+                <!-- <a href="#vision" class="text-gray-800  hover:text-yellow-500 transition duration-300">Vision</a> -->
+                <a href="#about" class="hover:text-yellow-400 transition duration-100">About</a>
+
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+    {% block content %}404{% endblock %}
+    
+    <nav class="p-0 shadow-md">.
+        <!-- <div class="p-0">.</div> -->
+    </nav>
+
+    <!-- bg-gradient-to-r from-red-400 to-blue-500  text-white -->
+    <footer class="text-gray-800">
+
+        <div class="p-5 container mx-auto text-center text-sm">
+            <a href="/privacypolicy">Privacy Policy</a> | <a href="/termsofservice">Terms of Service</a><br>
+            All Rights Reserved © 2023 /promptpl.us>_
+        </div>
+    </footer>
+
+</body>
+
+</html>

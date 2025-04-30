@@ -1,0 +1,223 @@
+{% extends 'template.html' %}
+{% block content %}
+
+<div>
+    <div
+        class="fixed z-30 w-full max-w-screen-md bg-white/80 shadow backdrop-blur-lg inset-x-0 top-0 mx-auto border border-gray-100 py-3 md:top-6 md:rounded-3xl lg:max-w-screen-lg">
+        <div class="px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex shrink-0">
+                    <a class=" flex items-center gap-1">
+                        <Logo />
+                        <div class="text-xl sm:text-2xl text-[#000000] font-bold pt-0.5">
+                            InfyGPT
+                        </div>
+                    </a>
+                </div>
+                <div class="hidden md:flex md:items-center md:justify-center md:gap-5"></div>
+                <div class="flex items-center justify-end sm:gap-3">
+                    <span
+                        class="cursor-pointer hidden sm:inline-block text-sm font-medium text-gray-900 transition-all duration-200 rounded-lg px-2 py-1 hover:bg-gray-100 hover:text-gray-900">
+                        How it works
+                    </span>
+                    <span
+                        class="cursor-pointer sm:inline-block text-sm font-medium text-gray-900 transition-all duration-200 rounded-lg px-2 py-1 hidden hover:bg-gray-100 hover:text-gray-900">
+                        Pricing
+                    </span>
+                    <Button icon={false} label={"Sign in"} />
+                </div>
+            </div>
+        </div>
+    </div>
+    <section
+        class="relative overflow-hidden bg-gradient-to-b from-blue-50 via-transparent to-transparent pb-12 pt-28 sm:pb-16 sm:pt-32 lg:pb-24 xl:pb-32 xl:pt-40">
+        <div class="relative isolate z-10">
+            <div
+                class="absolute -z-10 flex -translate-y-1/2 justify-center overflow-hidden inset-x-0 top-1/2 [mask-image:radial-gradient(50%_45%_at_50%_55%,white,transparent)]">
+                <svg class="h-[60rem] w-[100rem] flex-none stroke-blue-600 opacity-20" aria-hidden="true">
+                    <defs>
+                        <pattern id="e9033f3e-f665-41a6-84ef-756f6778e6fe" width="200" height="200" x="50%" y="50%"
+                            patternUnits="userSpaceOnUse" patternTransform="translate(-100 0)">
+                            <path d="M.5 200V.5H200" fill="none"></path>
+                        </pattern>
+                    </defs>
+                    <svg x="50%" y="50%" class="overflow-visible fill-blue-50">
+                        <path d="M-300 0h201v201h-201Z M300 200h201v201h-201Z" strokeWidth="0"></path>
+                    </svg>
+                    <rect width="100%" height="100%" strokeWidth="0" fill="url(#e9033f3e-f665-41a6-84ef-756f6778e6fe)">
+                    </rect>
+                </svg>
+            </div>
+        </div>
+        <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center">
+                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 ">
+                    Infy<span class="text-[#20B2AA]">GPT</span> <br />
+                    for providing better user experiences
+                </h1>
+                <h2 class="text-lg leading-8 text-gray-600 mt-6">
+                    Instantly respond to queries from visitors using a chatbot that
+                    has been trained on the information on your website.
+                </h2>
+                <div class="flex items-center justify-center gap-x-6 mt-10">
+                    <Button icon={true} buttonStyle="px-4 py-3" label={"Try Now"} />
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-white py-10 md:py-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-3">
+            <div class="max-w-2xl mx-auto lg:text-center">
+                <p class="text-base font-semibold leading-7 text-[#20B2AA]">
+                    Your Own AI Chatbot
+                </p>
+                <h2 class="text-2xl font-bold tracking-tight text-gray-900 mt-2 sm:text-4xl">
+                    The Future of Conversational AI
+                </h2>
+                <p class="text-lg leading-8 text-gray-600 mt-6">
+                    Developing a personalized chatbot trained on your content <br />{" "}
+                    is now as simple as pressing a single button.
+                </p>
+            </div>
+            <div class="max-w-2xl mx-auto mt-10 lg:max-w-none lg:pt-24">
+                <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                    <div class="flex flex-col">
+                        <h3 class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-[#20B2AA]" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true">
+                                <path fillRule="evenodd"
+                                    d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm3.75-2.75a.75.75 0 001.5 0V9.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0l-3.25 3.5a.75.75 0 101.1 1.02l1.95-2.1v4.59z"
+                                    clipRule="evenodd"></path>
+                            </svg>
+                            Enter your website URL
+                        </h3>
+                        <dd class="flex flex-auto flex-col text-base leading-7 text-gray-600 mt-4">
+                            <h4 class="flex-auto">
+                                Our automated system will seamlessly retrieve all pages from
+                                your website and present them for your review effortlessly.{" "}
+                            </h4>
+                        </dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <h3 class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-[#20B2AA]" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true">
+                                <path fillRule="evenodd"
+                                    d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm3.75-2.75a.75.75 0 001.5 0V9.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0l-3.25 3.5a.75.75 0 101.1 1.02l1.95-2.1v4.59z"
+                                    clipRule="evenodd"></path>
+                            </svg>
+                            Start Training
+                        </h3>
+                        <dd class="flex flex-auto flex-col text-base leading-7 text-gray-600 mt-4">
+                            <h4 class="flex-auto">
+                                Select the pages you want the chatbot to train on and click
+                                on <strong>Start Training.</strong>
+                            </h4>
+                        </dd>
+                    </div>
+                    <div class="flex flex-col">
+                        <h3 class="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
+                            <svg class="h-5 w-5 flex-none text-[#20B2AA]" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true">
+                                <path fillRule="evenodd"
+                                    d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm3.75-2.75a.75.75 0 001.5 0V9.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0l-3.25 3.5a.75.75 0 101.1 1.02l1.95-2.1v4.59z"
+                                    clipRule="evenodd"></path>
+                            </svg>
+                            Your own chatbot
+                        </h3>
+                        <dd class="flex flex-auto flex-col text-base leading-7 text-gray-600 mt-4">
+                            <h4 class="flex-auto">
+                                You now have your own chatbot that can answer anything
+                                related to your website content.
+                            </h4>
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </section>
+    <section class="bg-white">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div
+                class="relative isolate overflow-hidden bg-white px-6 py-10 md:py-24 text-center sm:shadow-sm sm:rounded-3xl sm:border sm:border-gray-100 sm:px-16">
+                <h2 class="max-w-2xl text-2xl font-bold tracking-tight text-gray-900 mx-auto sm:text-4xl">
+                    Ready to elevate your website&apos;s performance and impact
+                    <br /> to new heights?
+                </h2>
+                <h3 class="max-w-xl text-lg leading-8 text-gray-500 mx-auto mt-6">
+                    Unlock the potential of your website by harnessing the power of an
+                    AI-driven chatbot. Enhance user experience, engage visitors with
+                    personalized interactions, and achieve unprecedented levels of
+                    efficiency and customer satisfaction.
+                </h3>
+                <div class="flex items-center justify-center gap-x-6 mt-8">
+                    <Button icon={true} buttonStyle="px-4 py-3" label={"Try Now"} />
+                </div>
+                <svg viewBox="0 0 1024 1024"
+                    class="absolute -z-10 h-[64rem] w-[64rem] -translate-x-1/2 left-1/2 top-1/2 [mask-image:radial-gradient(closest-side,white,transparent)]"
+                    aria-hidden="true">
+                    <circle cx="512" cy="512" r="512" fill="url(#827591b1-ce8c-4110-b064-7cb85a0b1217)"
+                        fillOpacity="0.7"></circle>
+                    <defs>
+                        <radialGradient id="827591b1-ce8c-4110-b064-7cb85a0b1217">
+                            <stop stopColor="#3b82f6"></stop>
+                            <stop offset="1" stopColor="#1d4ed8"></stop>
+                        </radialGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    </section>
+    <footer class="bg-white py-12 sm:py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <a class="isomorphic-link flex items-center justify-center gap-1">
+                <Logo />
+                <div class="text-2xl text-[#000000] font-bold">InfyGPT</div>
+                <p class="sr-only">SiteGPT</p>
+            </a>
+            <nav class=" sm:columns-2 -mb-6 mt-8 flex flex-wrap sm:flex-nowrap gap-3 sm:gap-0 justify-center sm:space-x-8"
+                aria-label="Footer">
+                <div class="pb-6">
+                    <span
+                        class="cursor-pointer text-sm font-medium leading-6 text-gray-600 transition-all duration-150 hover:text-[#20B2AA hover:underline">
+                        Pricing
+                    </span>
+                </div>
+                <div class="pb-6">
+                    <span
+                        class="cursor-pointer text-sm font-medium leading-6 text-gray-600 transition-all duration-150 hover:text-[#20B2AA hover:underline">
+                        API Docs
+                    </span>
+                </div>
+                <div class="pb-6">
+                    <span
+                        class="cursor-pointer text-sm font-medium leading-6 text-gray-600 transition-all duration-150 hover:text-[#20B2AA hover:underline">
+                        Contact us
+                    </span>
+                </div>
+                <div class="pb-6">
+                    <span
+                        class="cursor-pointer text-sm font-medium leading-6 text-gray-600 transition-all duration-150 hover:text-[#20B2AA hover:underline">
+                        Terms &amp; Conditions
+                    </span>
+                </div>
+            </nav>
+            <div class="flex justify-center mt-8">
+                <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/infynno"
+                    class="isomorphic-link isomorphic-link--external inline-flex items-center justify-center gap-1.5 bg-white text-sm font-medium text-gray-500 transition-all duration-150 rounded-xl border border-gray-200 px-3 py-2 hover:bg-blue-50 hover:text-[#20B2AA] hover:border-[#20B2AA]">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84">
+                        </path>
+                    </svg>
+                    <span class="text-sm font-medium">Follow us on Twitter</span>
+                </a>
+            </div>
+            <p class="text-sm leading-5 text-gray-500 mt-8 text-center">
+                tailwindtap@gmail.com
+            </p>
+        </div>
+    </footer>
+</div>
+
+{% endblock %}

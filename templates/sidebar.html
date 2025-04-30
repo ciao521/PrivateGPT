@@ -1,0 +1,26 @@
+{% macro sb(type="") -%}
+
+<!-- lg:block lg:translate-x-0 lg:right-auto lg:bottom-0  -->
+<!-- hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all -->
+
+<!-- <div id="application-sidebar"
+    class="hs-overlay hs-overlay-open:translate-x-full -translate-x-0 transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-64 bg-white border-r border-gray-200 overflow-y-auto scrollbar-y dark:scrollbar-y dark:bg-slate-900 dark:border-gray-700"> -->
+
+<!-- -->
+
+<div id="application-sidebar" class="hidden fixed top-0 right-0 bottom-0 z-[60] border-gray-200 w-64">
+
+
+    <!-- <div id="application-sidebar"
+    class="hs-overlay hs-overlay-open:translate-x-full translate-x-full fixed top-0 right-0 bottom-0 z-[60]"> -->
+
+    <nav class="hs-accordion-group w-full h-full flex flex-col w-64 bg-white border-l border-gray-200 overflow-y-auto scrollbar-y dark:scrollbar-y dark:bg-slate-900 dark:border-gray-700"
+        data-hs-accordion-always-open>
+
+        {% from 'sidebarmenu.html' import sbm %}
+        {{ sbm("") }}
+
+    </nav>
+</div>
+
+{%- endmacro %}

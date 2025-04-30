@@ -1,0 +1,131 @@
+:root {
+    --color-gradient-1: #7d7aff;
+    --color-gradient-2: #2121e2;
+    --color-gradient-3: #00fff0;
+    --color-gradient-4: #8785FF;
+    --color-gradient-5: #FAFF00;
+    --color-gradient-6: #00F37F;
+}
+
+/* #00F37F */
+
+.colorBackground {
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(at 71% 77%,
+            var(--color-gradient-2) 0,
+            transparent 21%),
+        radial-gradient(at 36% 47%, var(--color-gradient-3) 0, transparent 50%),
+        radial-gradient(at 54% 29%, var(--color-gradient-3) 0, transparent 28%),
+        radial-gradient(at 45% 51%, var(--color-gradient-2) 0, transparent 53%),
+        radial-gradient(at 73% 44%, var(--color-gradient-1) 0, transparent 54%),
+        radial-gradient(at 24% 7%, var(--color-gradient-1) 0, transparent 40%),
+        radial-gradient(at 76% 46%, var(--color-gradient-2) 0, transparent 50%);
+    max-height: 800px;
+    height: 80vh;
+    max-width: 1400px;
+    width: 70vw;
+    width: 100%;
+    filter: blur(44px);
+    z-index: -1;
+    opacity: 40%;
+    top: 100px;
+    position: fixed;
+}
+
+.colorBackgroundBottom {
+    left: 50%;
+    transform: translateX(-50%) rotate(190deg);
+    background: radial-gradient(at 83% 25%,
+            var(--color-gradient-1) 0,
+            transparent 21%),
+        radial-gradient(at 36% 47%, var(--color-gradient-5) 0, transparent 50%),
+        radial-gradient(at 79% 29%, var(--color-gradient-6) 0, transparent 28%),
+        radial-gradient(at 45% 51%, var(--color-gradient-4) 0, transparent 53%),
+        radial-gradient(at 73% 44%, var(--color-gradient-3) 0, transparent 54%),
+        radial-gradient(at 24% 7%, var(--color-gradient-5) 0, transparent 40%),
+        radial-gradient(at 76% 46%, var(--color-gradient-6) 0, transparent 50%);
+    max-height: 800px;
+    height: 80vh;
+    max-width: 1400px;
+    width: 70vw;
+    width: 100%;
+    filter: blur(44px);
+    z-index: -1;
+    opacity: 40%;
+    /* bottom: 0; */
+    position: fixed;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #7209d4, #2832d4 33%, #00a5b2);
+    -webkit-background-clip: text;
+    color: transparent;
+    /* font-size: 50px; */
+}
+
+
+/* 
+.gradient-text {
+    background: linear-gradient(to right, var(--color-gradient-1), var(--color-gradient-2), var(--color-gradient-3), var(--color-gradient-4), var(--color-gradient-5), var(--color-gradient-6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+} */
+
+/* Current Gradient Text Class */
+.gradient-text-blue {
+    background: linear-gradient(to right, #7d7aff, #2121e2, #00fff0, #8785FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* New Gradient Text Class (Netlify Theme) */
+.gradient-text-yellow {
+    background: linear-gradient(to right, #FAFF00, #00F0FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Mixed Gradient Text Class (Netlify & Greenie Themes) */
+.gradient-text-mixed {
+    background: linear-gradient(to right, #FAFF00, #FFCC81, #00F37F, #00F37F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.fade-in {
+    animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.in-viewport {
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
+.out-of-viewport {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.appear-from-bottom {
+    opacity: 0;
+    transform: translateY(100px);
+    /* Start 100px below the original position */
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.appear-from-bottom.in-viewport {
+    opacity: 1;
+    transform: translateY(0);
+    /* Move to the original position */
+}

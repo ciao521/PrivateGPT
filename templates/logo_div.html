@@ -1,0 +1,21 @@
+{% macro logo(size, tagline="") -%}
+
+<!-- text-[#20B2AA] &gt;_ -->
+<!-- <span class="text-red-400 font-extrabold">&lt;</span> -->
+
+<!-- 
+{% if tagline == "" %}
+<div class="w-full sm:w-auto flex justify-center">
+    {% endif %} -->
+
+<a href="https://promptpl.us" class="font-bold text-red-500 text-{{ size }}xl">/<span
+        class="text-yellow-400">prompt</span><span class="text-green-500">pl.us</span><span
+        class="text-blue-500 font-extrabold">&gt;_&nbsp;</span>
+</a>
+{{ tagline }}
+<!-- 
+    {% if tagline == "" %}
+</div>
+{% endif %} -->
+
+{%- endmacro %}

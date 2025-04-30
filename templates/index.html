@@ -1,0 +1,238 @@
+{% extends 'template.html' %}
+{% block content %}
+
+<div class="colorBackground absolute"></div>
+<div class="colorBackgroundBottom absolute"></div>
+
+<section id="home"
+    class="relative overflow-hidden bg-gradient-to-b from-blue-50 via-transparent to-transparent pb-12 pt-28 sm:pb-16 sm:pt-32 lg:pb-24 xl:pb-32 xl:pt-40">
+    <div class="relative isolate z-10">
+        <div
+            class="absolute -z-10 flex -translate-y-1/2 justify-center overflow-hidden inset-x-0 top-1/2 [mask-image:radial-gradient(50%_45%_at_50%_55%,white,transparent)]">
+            <svg class="h-[60rem] w-[100rem] flex-none stroke-blue-600 opacity-20" aria-hidden="true">
+                <defs>
+                    <pattern id="e9033f3e-f665-41a6-84ef-756f6778e6fe" width="200" height="200" x="50%" y="50%"
+                        patternUnits="userSpaceOnUse" patternTransform="translate(-100 0)">
+                        <path d="M.5 200V.5H200" fill="none"></path>
+                    </pattern>
+                </defs>
+                <svg x="50%" y="50%" class="overflow-visible fill-blue-50">
+                    <path d="M-300 0h201v201h-201Z M300 200h201v201h-201Z" strokeWidth="0"></path>
+                </svg>
+                <rect width="100%" height="100%" strokeWidth="0" fill="url(#e9033f3e-f665-41a6-84ef-756f6778e6fe)">
+                </rect>
+            </svg>
+        </div>
+    </div>
+
+    <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 flex pt-6">
+
+        <div class="max-w-2xl mx-auto text-center">
+
+            <!-- <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 ">
+                Infy<span class="text-[#20B2AA]">GPT</span> <br />
+                for providing better user experiences
+            </h1>
+            <h2 class="text-lg leading-8 text-gray-600 mt-6">
+                Instantly respond to queries from visitors using a chatbot that
+                has been trained on the information on your website.
+            </h2> -->
+
+            <p class="text-3xl md:text-5xl font-bold mb-4"><span class="gradient-text">Your DATA. Any GPT.</span></p>
+            <p class="text-xl text-gray-600 mb-4">Leverage cutting-edge AI tech to transform your data and<br>
+                integrate them seamelessly with you anywhere.
+            </p>
+
+            <div class="flex gap-2 items-center justify-center text-sm md:text-lg text-white font-bold">
+                <div>
+                    <a href="#features"
+                        class="p-2 rounded bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-blue-500 hover:to-cyan-500">
+                        Explore</a>
+                </div>
+                <div>
+                    <a href="/files"
+                        class="p-2 rounded bg-gradient-to-r from-cyan-400 to-green-500 hover:from-pink-500 hover:to-yellow-500">
+                        Sandbox</a>
+                </div>
+                <div>
+                    <a href="/login">
+                        <img class="rounded hover:shadow-md" src={{ url_for('static',
+                            path='/btn_google_signin_dark_normal_web.png' ) }}>
+                    </a>
+                </div>
+
+                <!-- <div id="my-signin2"></div>
+                <script>
+                    function onSuccess(googleUser) {
+                        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+                    }
+                    function onFailure(error) {
+                        console.log(error);
+                    }
+                    function renderButton() {
+                        gapi.signin2.render('my-signin2', {
+                            'scope': 'profile email',
+                            'width': 240,
+                            'height': 50,
+                            'longtitle': true,
+                            'theme': 'dark',
+                            'onsuccess': onSuccess,
+                            'onfailure': onFailure
+                        });
+                    }
+                </script>
+                <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script> -->
+
+            </div>
+            <!-- <img src="{{ url_for('static', path='/proto.png') }}" alt="/promptpl.us&gt;"> -->
+        </div>
+    </div>
+
+</section>
+
+
+
+<!-- Hero Section -->
+<section class="text-gray-600 flex items-center justify-center fade-in">
+    <!-- min-h-screen -->
+    <div class="container text-left justify-center flex flex-wrap w-2/3">
+
+        <!-- <div class="w-full md:w-1/2"> -->
+        <img src="{{ url_for('static', path='/proto.png') }}" alt="/promptpl.us&gt;" class="rounded-3xl">
+        <!-- </div> -->
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="p-8">
+    <div class="container mx-auto text-gray-600 p-8">
+        <h2 class="text-4xl font-bold mb-4 text-center appear-from-bottom p-8">Innovative Features</h2>
+        <p class="mb-8 text-center appear-from-bottom">
+            Exprerience the features of our platform designed to be instantly connected.
+        </p>
+
+        <div class="appear-from-bottom flex flex-wrap justify-between mb-8">
+            <div class="w-full md:w-1/2 flex justify-end">
+                <div class="w-4/5">
+                    <img src="{{ url_for('static', path='/proto.png') }}" alt="Google Drive"
+                        class="w-full h-auto transform hover:scale-105 transition-all duration-300">
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 p-8">
+                <h3 class="text-2xl font-semibold">Google Drive Integration</h3>
+                <p class="text-xl">Take your drive to GPT instantly without any setup.<br>
+                    Easily access and manage your files from anywhere.<br>
+                    ChatGPT & AI Assistance. Create stunning websites with a single click.</p>
+
+            </div>
+        </div>
+
+        <div class="appear-from-bottom flex flex-wrap-reverse md:flex-wrap justify-between mb-8 text-right">
+            <div class="w-full md:w-1/2 p-8">
+                <h3 class="text-2xl font-semibold">One-Click Static-Site-Generation</h3>
+                <p class="text-xl">
+                    Scale your business with your own social network.<br>
+                    Let's communicate with with AI-powered consultant.<br>
+                    Get real-time support and insights.
+                </p>
+            </div>
+            <div class="w-full md:w-1/2 flex">
+                <div class="w-4/5">
+                    <img src="https://images.unsplash.com/photo-1516251193007-45ef944ab0c6" alt="ChatGPT"
+                        class="w-full h-auto transform hover:scale-105 transition-all duration-300">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Vision Section -->
+<!-- bg-gradient-to-l from-purple-400 to-blue-500  text-white -->
+<section id="about" class="text-gray-600 flex items-center justify-center fade-in pt-28">
+    <!-- p-5 min-h-screen -->
+
+    <div class="w-4/5 container mx-auto text-gray-600">
+        <h2 class="text-4xl font-bold mb-8 text-center appear-from-bottom">About Us</h2>
+        <!-- <p class="mb-8 text-center appear-from-bottom">
+            Our platform offers a wide range of features designed to be connected instantly on the fly.<br>
+            Explore some of the key features below:
+        </p> -->
+
+        <p class="py-8 text-xl text-center text-gray-600">
+            We are a team of passionate data scientists, engineers, and researchers, specialized in providing tailored
+            solutions for businesses.<br>
+            Our team works closely with B2B clients to understand their unique needs and develop customized
+            solutions that align with their goals.<br>
+            Whether you need to integrate GPT models into your systems or require a customized solution, our expertise
+            can help you achieve your goals.<br>
+            {% from 'logo_div.html' import logo %}
+            {{ logo(1,"transforming businesses and lives with AI and data.") }}
+        </p>
+        <!-- justify-center -->
+        <div class="appear-from-bottom flex flex-wrap items-center justify-between">
+            <div class="w-full md:w-1/2 flex justify-center">
+                <div class="w-4/5">
+                    <img src="https://images.unsplash.com/photo-1557683316-973673baf926" class="w-full h-auto mb-4">
+                    <!-- transform hover:scale-105 transition-all duration-300 -->
+                </div>
+            </div>
+            <div class="w-full md:w-1/2">
+                <p class="text-xl font-semibold text-center">Let's talk about your ideas.
+                </p>
+                <form action="/contact" method="post" class="flex flex-wrap justify-center">
+                    <div class="w-full md:w-1/2 p-2">
+                        <input type="text" name="name" placeholder="Your Name" class="w-full p-2 rounded border">
+                    </div>
+                    <div class="w-full md:w-1/2 p-2">
+                        <input type="email" name="email" placeholder="Your Email" class="w-full p-2 rounded border">
+                    </div>
+                    <div class="w-full p-2">
+                        <textarea name="message" placeholder="Your Message" rows="5"
+                            class="w-full p-2 rounded border"></textarea>
+                    </div>
+                    <div class="w-full p-2">
+                        <button type="submit"
+                            class="w-full p-2 rounded text-white bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500">
+                            Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about_" class="fade-in appear-from-bottom text-gray-600">
+    <!-- p-5  -->
+    <div class="container mx-auto">
+        <!-- <h2 class="text-4xl font-bold mb-4">About Us</h2> &lt; -->
+
+        <div class="flex flex-wrap items-center justify-center">
+            <div class="w-full md:w-1/2 p-5">
+
+                <h3 class="text-4xl font-bold mb-4">
+                    Our Vision:<br>Making AI widely accessible.
+                </h3>
+                <p class="text-xl">
+                    <!-- We envision a world where technology is accessible for all<br> -->
+                    We aim to democratize technology and drive innovation.<br>
+                    We value innovation, collaboration, and improvement.<br>
+                    We empower individuals and organizations to harness their data and leverage the power of GPT models.
+                </p>
+
+                <!-- <div class="container mx-auto"> -->
+
+                <!-- </div> -->
+
+            </div>
+            <div class="w-full md:w-1/2 p-5">
+                <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb" alt="Contact Us"
+                    class="w-full h-auto rounded">
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Landing Page</title>
+</head>
+
+<body>
+
+    <!-- <a href="/login">
+        <img src={{ url_for('static', path='/btn_google_signin_dark_focus_web.png' ) }}>
+    </a> -->
+
+    <h2>Login successful!</h2>
+    <p>Click the button below to load your Google Drive data.</p>
+    <button id="scanDriveBtn" class="btn btn-primary">Scan My Google Drive</button>
+
+    <div id="logs"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // const socket = new WebSocket(`wss://linkpay.to/ws`);
+            const socket = new WebSocket(`wss://promptpl.us/ws`);
+
+            socket.onopen = (event) => {
+                console.log("WebSocket Connected");
+            };
+
+            socket.onmessage = async (event) => {
+                const logDiv = document.getElementById("logs");
+                logDiv.innerHTML += `<p>${event.data}</p>`;
+                console.log(event.data);  // Added for debugging
+
+                if (event.data === "Fetching completed!") {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    window.location.href = "/files/";
+                }
+            };
+
+            socket.onclose = (event) => {
+                if (event.wasClean) {
+                    console.log(`Connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+                } else {
+                    console.log('Connection died');
+                }
+            };
+
+            socket.onerror = (error) => {
+                console.error(`Error: ${error.message}`);
+            };
+
+            document.getElementById("scanDriveBtn").addEventListener("click", function () {
+                socket.send("start");
+            });
+        });
+    </script>
+</body>
+
+</html>
