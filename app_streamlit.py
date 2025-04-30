@@ -5,48 +5,102 @@ import streamlit as st
 import asyncio
 
 # ChromaDB SQLite3バージョンの問題を解決するためのコード
-# これはembedchainをインポートする前に実行する必要があります
 import sys
 import subprocess
 import importlib
 
+# Streamlit Cloudで動作するSQLite互換性チェック
 def fix_sqlite():
     try:
         import sqlite3
         # SQLite3バージョンをチェック
         if sqlite3.sqlite_version_info < (3, 35, 0):
             st.warning(f"現在のSQLite3バージョンは{sqlite3.sqlite_version}です。ChromaDBには3.35.0以上が必要です。")
-            st.info("pysqlite3-binaryをインストールしています...")
             
-            # pysqlite3-binaryをインストール
-            subprocess.check_call([
-                sys.executable, "-m", "pip", "install", 
-                "pysqlite3-binary", "--quiet", "--disable-pip-version-check"
-            ])
-            
-            # pysqlite3をインポートして標準ライブラリのsqlite3を置き換え
-            __import__("pysqlite3")
-            sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
-            
-            # 確認
-            import sqlite3
-            st.success(f"SQLite3バージョンが{sqlite3.sqlite_version}に更新されました。")
+            try:
+                # すでにインストールされているかチェック
+                try:
+                    import pysqlite3
+                    # すでにインストールされている場合は置き換えを実行
+                    sys.modules["sqlite3"] = pysqlite3
+                    # 確認
+                    import sqlite3
+                    st.success(f"既存のpysqlite3を使用して、SQLite3バージョンを{sqlite3.sqlite_version}に更新しました。")
+                    return True
+                except ImportError:
+                    # インストールされていない場合はインストールを試みる
+                    st.info("pysqlite3-binaryをインストールしています...")
+                    try:
+                        subprocess.check_call([
+                            sys.executable, "-m", "pip", "install", 
+                            "pysqlite3-binary", "--quiet", "--disable-pip-version-check"
+                        ])
+                        
+                        # pysqlite3をインポートして標準ライブラリのsqlite3を置き換え
+                        __import__("pysqlite3")
+                        sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+                        
+                        # 確認
+                        import sqlite3
+                        st.success(f"SQLite3バージョンが{sqlite3.sqlite_version}に更新されました。")
+                        return True
+                    except Exception as e:
+                        st.error(f"pysqlite3-binaryのインストール中にエラーが発生しました: {e}")
+                        return False
+            except Exception as e:
+                st.error(f"SQLite3の更新中にエラーが発生しました: {e}")
+                return False
     except Exception as e:
-        st.error(f"SQLite3の更新中にエラーが発生しました: {e}")
-        st.info("代替の方法でアプリを実行します。一部の機能が制限される可能性があります。")
+        st.error(f"SQLite3バージョンチェック中にエラーが発生しました: {e}")
+        return False
+    
+    return True  # すでに互換性がある場合はTrueを返す
 
-# Streamlit Cloudでの実行時のみSQLite問題を修正
+# SQLiteとChromaDBの互換性問題を解決するか、代替の方法を使用する
+sqlite_compatible = False
+
+# Streamlit Cloud環境変数をセット
+if 'STREAMLIT_SHARING' in os.environ or 'STREAMLIT_CLOUD' in os.environ:
+    os.environ["IS_STREAMLIT_CLOUD"] = "true"
+
+# Streamlit Cloudでの実行時または明示的な環境変数が設定されている場合
 if os.environ.get("IS_STREAMLIT_CLOUD", "false").lower() == "true":
-    fix_sqlite()
+    sqlite_compatible = fix_sqlite()
 elif not os.path.exists("/.dockerenv"):  # ローカル環境でのみ実行
     try:
-        fix_sqlite()
+        sqlite_compatible = fix_sqlite()
     except:
         pass
 
 # embedchainのAppクラスをインポート
 try:
-    from embedchain import App
+    if sqlite_compatible:
+        from embedchain import App
+        st.success("embedchainを正常にロードしました。すべての機能が利用可能です。")
+    else:
+        # SQLite互換性がない場合は、代替実装を使用
+        from embedchain.config import AppConfig
+        from embedchain.app import App as OriginalApp
+        from embedchain.llm import OpenAILLM
+        
+        class App(OriginalApp):
+            def __init__(self, config=None, **kwargs):
+                # FAISSをベクトルストアとして使用
+                from embedchain.vectordb.faiss import FAISSVectorDB
+                
+                if config is None:
+                    config = AppConfig(
+                        collect_metrics=False,
+                        log_level="WARNING"
+                    )
+                
+                self.config = config
+                self.llm = OpenAILLM()
+                self.vectordb = FAISSVectorDB()
+                self.data_formatter = None
+                
+        st.info("SQLite互換性の問題を回避するため、FAISSベクトルストアを使用します。")
+        
 except ImportError as e:
     st.error(f"embedchainライブラリのインポートに失敗しました: {e}")
     st.info("アプリの一部機能が利用できません。")
