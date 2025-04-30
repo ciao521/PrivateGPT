@@ -1,7 +1,9 @@
-streamlit 
-embedchain==0.1.99
-langchain==0.1.4
-chromadb==0.4.17
+streamlit>=1.31.0
+embedchain>=0.1.99
+langchain>=0.1.4
+langchain-community>=0.0.13
+langchain-core>=0.1.10
+chromadb>=0.4.17
 google-auth 
 google-auth-oauthlib 
 google-api-python-client 

@@ -3,7 +3,67 @@ import shutil
 from dotenv import load_dotenv
 import streamlit as st
 import asyncio
-from embedchain import App
+
+# ChromaDB SQLite3バージョンの問題を解決するためのコード
+# これはembedchainをインポートする前に実行する必要があります
+import sys
+import subprocess
+import importlib
+
+def fix_sqlite():
+    try:
+        import sqlite3
+        # SQLite3バージョンをチェック
+        if sqlite3.sqlite_version_info < (3, 35, 0):
+            st.warning(f"現在のSQLite3バージョンは{sqlite3.sqlite_version}です。ChromaDBには3.35.0以上が必要です。")
+            st.info("pysqlite3-binaryをインストールしています...")
+            
+            # pysqlite3-binaryをインストール
+            subprocess.check_call([
+                sys.executable, "-m", "pip", "install", 
+                "pysqlite3-binary", "--quiet", "--disable-pip-version-check"
+            ])
+            
+            # pysqlite3をインポートして標準ライブラリのsqlite3を置き換え
+            __import__("pysqlite3")
+            sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+            
+            # 確認
+            import sqlite3
+            st.success(f"SQLite3バージョンが{sqlite3.sqlite_version}に更新されました。")
+    except Exception as e:
+        st.error(f"SQLite3の更新中にエラーが発生しました: {e}")
+        st.info("代替の方法でアプリを実行します。一部の機能が制限される可能性があります。")
+
+# Streamlit Cloudでの実行時のみSQLite問題を修正
+if os.environ.get("IS_STREAMLIT_CLOUD", "false").lower() == "true":
+    fix_sqlite()
+elif not os.path.exists("/.dockerenv"):  # ローカル環境でのみ実行
+    try:
+        fix_sqlite()
+    except:
+        pass
+
+# embedchainのAppクラスをインポート
+try:
+    from embedchain import App
+except ImportError as e:
+    st.error(f"embedchainライブラリのインポートに失敗しました: {e}")
+    st.info("アプリの一部機能が利用できません。")
+    
+    # ダミーのAppクラスを定義してエラーを回避
+    class App:
+        def __init__(self, *args, **kwargs):
+            pass
+        
+        def add(self, *args, **kwargs):
+            st.error("embedchainライブラリが利用できないため、ドキュメントを追加できません。")
+            return False
+        
+        def query(self, *args, **kwargs):
+            st.error("embedchainライブラリが利用できないため、クエリを実行できません。")
+            return "エラー: embedchainライブラリが利用できません。システム管理者に連絡してください。"
+
 from google_auth_oauthlib.flow import Flow, InstalledAppFlow
 from googleapiclient.discovery import build
 from utilities import refresh_file
@@ -66,9 +126,13 @@ CLIENT_ID={st.session_state.google_client_id}
 CLIENT_SECRET={st.session_state.google_client_secret}
 REDIRECT_URI={st.session_state.google_redirect_uri}"""
     
-    # .envファイルに書き込み
-    with open('.env', 'w') as f:
-        f.write(env_content)
+    # Streamlit Cloudでは.envファイルの書き込みをスキップ
+    try:
+        with open('.env', 'w') as f:
+            f.write(env_content)
+    except Exception as e:
+        st.warning("環境設定ファイルの保存に失敗しました。Streamlit Cloudでは設定は一時的にのみ保持されます。")
+        print(f"Error saving .env file: {e}")
     
     # 現在のセッションの環境変数を直接設定
     os.environ["OPENAI_API_KEY"] = st.session_state.openai_api_key
@@ -83,12 +147,15 @@ REDIRECT_URI={st.session_state.google_redirect_uri}"""
     import sys
     for module in list(sys.modules.values()):
         if hasattr(module, 'os') and hasattr(module.os, 'environ'):
-            module.os.environ.update({
-                "OPENAI_API_KEY": st.session_state.openai_api_key,
-                "CLIENT_ID": st.session_state.google_client_id,
-                "CLIENT_SECRET": st.session_state.google_client_secret,
-                "REDIRECT_URI": st.session_state.google_redirect_uri
-            })
+            try:
+                module.os.environ.update({
+                    "OPENAI_API_KEY": st.session_state.openai_api_key,
+                    "CLIENT_ID": st.session_state.google_client_id,
+                    "CLIENT_SECRET": st.session_state.google_client_secret,
+                    "REDIRECT_URI": st.session_state.google_redirect_uri
+                })
+            except Exception as e:
+                print(f"Error updating environment variables in module: {e}")
     
     st.success("設定が保存され、環境変数に反映されました。")
     
@@ -285,30 +352,42 @@ def drive_mode():
 def local_mode():
     st.subheader("ローカルデータモード")
     # Make sure sandbox directory exists
-    os.makedirs('sandbox', exist_ok=True)
+    try:
+        os.makedirs('sandbox', exist_ok=True)
+    except Exception as e:
+        st.warning("sandboxディレクトリの作成に失敗しました。Streamlit Cloudではファイルアップロード機能が制限される場合があります。")
+        print(f"Error creating sandbox directory: {e}")
     
     # sandbox フォルダへのアップロード機能
     uploaded_local = st.file_uploader("ローカルにアップロード (sandbox)", type=['pdf','txt','docx'])
     if uploaded_local:
-        save_path = os.path.join('sandbox', uploaded_local.name)
-        with open(save_path, 'wb') as f:
-            f.write(uploaded_local.getbuffer())
-        st.success(f"{uploaded_local.name} を sandbox に保存しました。")
-        # Force session state refresh to show the new file
-        if 'last_refresh' not in st.session_state:
-            st.session_state.last_refresh = 0
-        st.session_state.last_refresh += 1
+        try:
+            save_path = os.path.join('sandbox', uploaded_local.name)
+            with open(save_path, 'wb') as f:
+                f.write(uploaded_local.getbuffer())
+            st.success(f"{uploaded_local.name} を sandbox に保存しました。")
+            # Force session state refresh to show the new file
+            if 'last_refresh' not in st.session_state:
+                st.session_state.last_refresh = 0
+            st.session_state.last_refresh += 1
+        except Exception as e:
+            st.error(f"ファイルの保存中にエラーが発生しました: {str(e)}")
+            st.info("Streamlit Cloudでは一時的なファイル保存のみが可能です。")
 
     # Get the file list from sandbox directory
-    sandbox_files = refresh_file()
-    
-    # Only show selection UI if there are files available
-    if sandbox_files and len(sandbox_files) > 0:
-        selected = st.multiselect("対話に使用するファイルを選択", sandbox_files)
-        if selected:
-            chat_section(selected_files=selected, mode='local')
-    else:
-        st.info("sandboxディレクトリにファイルをアップロードしてください。")
+    try:
+        sandbox_files = refresh_file()
+        
+        # Only show selection UI if there are files available
+        if sandbox_files and len(sandbox_files) > 0:
+            selected = st.multiselect("対話に使用するファイルを選択", sandbox_files)
+            if selected:
+                chat_section(selected_files=selected, mode='local')
+        else:
+            st.info("sandboxディレクトリにファイルをアップロードしてください。")
+    except Exception as e:
+        st.error(f"ファイル一覧の取得中にエラーが発生しました: {str(e)}")
+        st.info("Streamlit Cloudでは、セッションごとに新しいファイルをアップロードする必要があります。")
 
 def chat_section(creds=None, selected_files=None, mode='local'):
     st.subheader("チャット")
@@ -322,42 +401,62 @@ def chat_section(creds=None, selected_files=None, mode='local'):
     os.environ["OPENAI_API_KEY"] = st.session_state.openai_api_key
     
     # Initialize or update the embedchain App
-    if 'emb_app' not in st.session_state:
-        st.session_state.emb_app = App()
-    emb_app = st.session_state.emb_app
+    try:
+        if 'emb_app' not in st.session_state:
+            st.session_state.emb_app = App()
+        emb_app = st.session_state.emb_app
+    except Exception as e:
+        st.error(f"Embedchain Appの初期化中にエラーが発生しました: {str(e)}")
+        st.info("OpenAI API キーが正しく設定されているか確認してください。")
+        return
 
-    if mode == 'local' and selected_files:
-        for f in selected_files:
-            # Using 'pdf_file' data type which is the correct type for embedchain
-            emb_app.add(source=os.path.join('sandbox', f), data_type='pdf_file')
-    if mode == 'drive' and creds:
-        try:
-            service = build('drive', 'v3', credentials=creds)
-            files = fetch_files_from_drive(service)
-            if files:
-                for f in files:
-                    # Using 'google_drive_file' instead of 'gdrive'
-                    try:
-                        emb_app.add(source=f['id'], data_type='google_drive_file')
-                    except Exception as e:
-                        st.warning(f"ファイル '{f['name']}' (ID: {f['id']}) の処理中にエラーが発生しました: {str(e)}")
-            else:
-                st.info("処理するファイルがありません。")
-        except Exception as e:
-            st.error(f"Google Driveファイルの取得中にエラーが発生しました: {str(e)}")
+    try:
+        if mode == 'local' and selected_files:
+            for f in selected_files:
+                try:
+                    # Using 'pdf_file' data type which is the correct type for embedchain
+                    file_path = os.path.join('sandbox', f)
+                    if not os.path.exists(file_path):
+                        st.warning(f"ファイル {f} が見つかりません。")
+                        continue
+                    emb_app.add(source=file_path, data_type='pdf_file')
+                except Exception as e:
+                    st.warning(f"ファイル '{f}' の処理中にエラーが発生しました: {str(e)}")
+        
+        if mode == 'drive' and creds:
+            try:
+                service = build('drive', 'v3', credentials=creds)
+                files = fetch_files_from_drive(service)
+                if files:
+                    for f in files:
+                        try:
+                            # Using 'google_drive_file' instead of 'gdrive'
+                            emb_app.add(source=f['id'], data_type='google_drive_file')
+                        except Exception as e:
+                            st.warning(f"ファイル '{f['name']}' (ID: {f['id']}) の処理中にエラーが発生しました: {str(e)}")
+                else:
+                    st.info("処理するファイルがありません。")
+            except Exception as e:
+                st.error(f"Google Driveファイルの取得中にエラーが発生しました: {str(e)}")
+                st.code(traceback.format_exc())
+    except Exception as e:
+        st.error(f"ファイル処理中にエラーが発生しました: {str(e)}")
+        st.code(traceback.format_exc())
 
     query = st.text_input("質問を入力", key='query')
-    if st.button("送信"):
+    if st.button("送信") and query:
         try:
-            # Remove character limit by setting max_tokens parameter to a high value
-            answer = emb_app.query(query, citations=False, max_tokens=4000)
-            # Use a text area with expanded height to display the full response
-            st.markdown("### 回答")
-            st.markdown(answer)
+            with st.spinner("回答を生成中..."):
+                # Remove character limit by setting max_tokens parameter to a high value
+                answer = emb_app.query(query, citations=False, max_tokens=4000)
+                # Use a text area with expanded height to display the full response
+                st.markdown("### 回答")
+                st.markdown(answer)
         except Exception as e:
             st.error(f"クエリ処理中にエラーが発生しました: {str(e)}")
             st.write("詳細なエラー情報:")
             st.code(traceback.format_exc())
+            st.info("OpenAI API キーが正しく設定されているか、また十分なクレジットがあるか確認してください。")
 
 if __name__ == "__main__":
     main()
